@@ -1,0 +1,104 @@
+#Activity Main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Email"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp" />
+
+    <EditText
+        android:id="@+id/et1_emailid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Recipient Email"
+        android:inputType="textEmailAddress"
+        android:layout_marginBottom="12dp" />
+
+    <EditText
+        android:id="@+id/et2_emailsub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Subject"
+        android:inputType="text"
+        android:layout_marginBottom="12dp" />
+
+    <EditText
+        android:id="@+id/et3_emailmsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Message"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        android:minLines="5"
+        android:layout_marginBottom="20dp" />
+
+    <Button
+        android:id="@+id/btn_Send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Email" />
+
+</LinearLayout>
+
+#Main Activity.java
+package com.example.labprogram_11;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    // UI elements
+    Button button;
+    EditText sendto, subject, body;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Link variables to XML views
+        sendto = findViewById(R.id.et1_emailid);
+        subject = findViewById(R.id.et2_emailsub);
+        body = findViewById(R.id.et3_emailmsg);
+        button = findViewById(R.id.btn_Send);
+
+        // When Send button is clicked
+        button.setOnClickListener(view -> {
+            String emailsend = sendto.getText().toString().trim();
+            String emailsubject = subject.getText().toString().trim();
+            String emailbody = body.getText().toString().trim();
+
+            // Basic validation
+            if (emailsend.isEmpty()) {
+                Toast.makeText(this, "Please enter recipient email", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Create email intent
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{emailsend});
+            intent.putExtra(Intent.EXTRA_SUBJECT, emailsubject);
+            intent.putExtra(Intent.EXTRA_TEXT, emailbody);
+            intent.setType("message/rfc822"); // Only email apps will respond
+
+            // Check if an email app exists before launching
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(Intent.createChooser(intent, "Choose an Email client:"));
+            } else {
+                Toast.makeText(this, "No email app found", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}
