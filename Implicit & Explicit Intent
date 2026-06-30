@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-#Activty New.xml
+#activty_new.xml
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-#New Activity.java
+#NewActivity.java
 package com.example.labprogram_4;
 
 import android.os.Bundle;
